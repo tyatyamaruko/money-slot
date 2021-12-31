@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>お年玉ルーレット</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script>
+
+        let music = new Audio("drumroll-cut.mp3");
+
+        var carr, nowStatus;
+        window.addEventListener("load", function () {
+            carr = [{ f: false, v: 0, obj: null }, { f: false, v: 0, obj: null }, { f: false, v: 0, obj: null }, { f: false, v: 0, obj: null }];
+            carr[0].obj = document.getElementById("c1");
+            carr[1].obj = document.getElementById("c2");
+            carr[2].obj = document.getElementById("c3");
+            carr[3].obj = document.getElementById("c4");
+            nowStatus = false;
+            setInterval(interval, 20);
+        });
+        function interval() {
+            if (nowStatus) {
+                for (let i = 0; i < carr.length; i++) {
+                    if (carr[i].f) {
+                        carr[i].v++;
+                        if (carr[0].v > 3) {
+                            carr[0].v = 0;
+                        } else { 
+                            if (carr[i].v > 5) { carr[i].v = 0; }
+                        }
+                        carr[i].obj.innerHTML = carr[i].v;
+                    }
+                }
+            }
+        }
+        function start() {
+            music.play();
+            music.loop = true;
+            if (nowStatus) { return; }
+            nowStatus = true;
+            carr[0].f = true;
+            carr[1].f = true;
+            carr[2].f = true;
+            carr[3].f = true;
+        }
+        function stop(c) {
+            if (nowStatus) {
+                carr[c].f = false;
+                const pinM = new Audio("pin.mp3");
+                pinM.play();
+                if (!carr[0].f && !carr[1].f && !carr[2].f && !carr[3].f) {
+                    music.pause();
+                    const d1 = new Date();
+                    while (true) {
+                        const d2 = new Date();
+                        if (d2 - d1 > 200) {
+                            break;
+                        }
+                    }
+                    const cracker = new Audio("cracker.mp3");
+                    cracker.play();
+                    nowStatus = false;
+                    const mount = `${carr[0].v}` + `${carr[1].v}` + `${carr[2].v}` + `${carr[3].v}`;
+                    document.getElementById("char").innerHTML = mount + "円";
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .w25 {
+            width: 25%;
+            text-align: center;
+        }
+
+        .w100 {
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1 class="text-center mt-5">お年玉ルーレット</h1>
+    </header>
+    <main class="mt-5">
+        <div class="mx-auto" style="display:flex;width:50%;flex-wrap:wrap;">
+            <div id="c1" class="w25 h1">0</div>
+            <div id="c2" class="w25 h1">0</div>
+            <div id="c3" class="w25 h1">0</div>
+            <div id="c4" class="w25 h1">0</div>
+            <div class="w25"><button onclick="stop(0)">ストップ</button></div>
+            <div class="w25"><button onclick="stop(1)">ストップ</button></div>
+            <div class="w25"><button onclick="stop(2)">ストップ</button></div>
+            <div class="w25"><button onclick="stop(3)">ストップ</button></div>
+            <div class="w100 mt-5"><button onclick="start()">スタート</button></div>
+        </div>
+        <div class="mx-auto text-center h1 mt-5" id="char">
+            0000円
+        </div>
+    </main>
+</body>
+
+</html>
