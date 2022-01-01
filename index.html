@@ -26,15 +26,15 @@
         function interval() {
             if (nowStatus) {
                 for (let i = 0; i < carr.length; i++) {
-                    if (carr[i].f) {
-                        carr[i].v++;
-                        if (carr[0].v > 3) {
-                            carr[0].v = 0;
-                        } else { 
+                    // if (carr[i].f) {
+                    //     carr[i].v++;
+                    //     if (carr[0].v > 5) {
+                    //         carr[0].v = 0;
+                    //     } else { 
                             if (carr[i].v > 5) { carr[i].v = 0; }
-                        }
+                        // }
                         carr[i].obj.innerHTML = carr[i].v;
-                    }
+                    // }
                 }
             }
         }
